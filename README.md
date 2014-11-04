@@ -1,4 +1,4 @@
-divide
+Divide
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
 
@@ -19,24 +19,55 @@ For use in the browser, use [browserify](https://github.com/substack/node-browse
 To use the module,
 
 ``` javascript
-var foo = require( 'compute-divide' );
+var divide = require( 'compute-divide' );
 ```
 
-#### foo( arr )
+#### divide( arr, x )
 
-What does this function do?
+Computes an element-wise division of an input `array`. `x` may be either an `array` of equal length or a scalar.
+
+``` javascript
+divide( [ 2, 1, 4, 2 ], 2 );
+// returns [ 1, 0.5, 2, 1 ]
+
+divide( [ 2, 1, 3, -6 ], [ 1, 2, 4, 3 ] );
+// returns [ 1, 0.5, 0.75, -2 ]
+```
 
 
 ## Examples
 
 ``` javascript
-var foo = require( 'compute-divide' );
+var divide = require( 'compute-divide' );
+
+// Simulate some data...
+var data = new Array( 100 );
+
+for ( var i = 0; i < data.length; i++ ) {
+	data[ i ] = Math.round( Math.random()*100 );
+}
+
+divide( data, 10 );
+
+console.log( data.join( '\n' ) );
 ```
 
 To run the example code from the top-level application directory,
 
 ``` bash
 $ node ./examples/index.js
+```
+
+
+## Notes
+
+This function mutates the input `array`. If mutation is undesired,
+
+``` javascript
+var data = [ 1, 2, 3, 4 ],
+	copy = data.slice();
+
+divide( copy, 2 );
 ```
 
 
