@@ -1,6 +1,6 @@
 {
   "name": "compute-divide",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Computes an element-wise division.",
   "author": {
     "name": "Athan Reines",
