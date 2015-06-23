@@ -34,9 +34,9 @@ describe( 'matrix divide', function tests() {
 	d2 = new Float64Array( 25 );
 	d3 = new Float64Array( 25 );
 	for ( i = 0; i < d1.length; i++ ) {
-		d1[ i ] = i;
-		d2[ i ] = i / i;
-		d3[ i ] = i * 3;
+		d1[ i ] = ( i + 1 );
+		d2[ i ] = 1;
+		d3[ i ] = ( i + 1 ) / 3;
 	}
 
 	beforeEach( function before() {
