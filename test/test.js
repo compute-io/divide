@@ -90,17 +90,11 @@ describe( 'compute-divide', function tests() {
 		}
 	});
 
-
-	it( 'should throw an error if provided an array and an unsupported second factor', function test() {
+	it( 'should throw an error if provided a number as the first argument and an not applicable option', function test() {
 		var values = [
-			'5',
-			true,
-			undefined,
-			null,
-			NaN,
-			{},
-			function(){},
-			matrix( [2,2] )
+			{'accessor': function getValue( d ) { return d; } },
+			{'copy': false},
+			{'path': 'x'},
 		];
 
 		for ( var i = 0; i < values.length; i++ ) {
@@ -108,29 +102,7 @@ describe( 'compute-divide', function tests() {
 		}
 		function badValue( value ) {
 			return function() {
-				divide( [1,2,3], value );
-			};
-		}
-	});
-
-	it( 'should throw an error if provided a matrix and an unsupported second factor', function test() {
-		var values = [
-			'5',
-			true,
-			undefined,
-			null,
-			NaN,
-			{},
-			function(){},
-			[]
-		];
-
-		for ( var i = 0; i < values.length; i++ ) {
-			expect( badValue( values[i] ) ).to.throw( Error );
-		}
-		function badValue( value ) {
-			return function() {
-				divide( matrix( [2,2] ), value );
+				divide( 12, [1,2,3], value );
 			};
 		}
 	});
@@ -151,16 +123,55 @@ describe( 'compute-divide', function tests() {
 		}
 	});
 
+
+	it( 'should return NaN if the first argument is a number and the second argument is neither numberic, array-like, or matrix-like', function test() {
+		var values = [
+			// '5', // valid as is array-like (length)
+			true,
+			undefined,
+			null,
+			NaN,
+			function(){},
+			{}
+		];
+
+		for ( var i = 0; i < values.length; i++ ) {
+			assert.isTrue( isnan( divide( 8, values[ i ] ) ) );
+		}
+	});
+
 	it( 'should divide two numbers', function test() {
 		assert.strictEqual( divide( 3, 2 ), 1.5 );
 		assert.strictEqual( divide( 20, 10  ), 2 );
 	});
 
-	it( 'should throw an error if provided a number and an array as the second argument', function test() {
-		expect( foo ).to.throw( Error );
-		function foo() {
-			divide( 2, [ 1, 1 ]);
-		}
+	it( 'should calculate the division of a scalar and an array when the argument order is reversed', function test() {
+		var data, actual, expected;
+		data = [ 1, 2 ];
+		actual = divide( 4, data );
+		expected = [ 4, 2 ];
+		assert.deepEqual( actual, expected );
+	});
+
+	it( 'should calculate the division of a scalar and a matrix when the argument order is reversed', function test() {
+		var data, actual, expected;
+		data = matrix( new Int8Array( [ 1,2,3,4 ] ), [2,2] );
+		actual = divide( 12, data );
+		expected = matrix( new Float64Array( [12,6,4,3] ), [2,2] );
+
+		assert.deepEqual( actual.data, expected.data );
+	});
+
+	it( 'should calculate the division of a scalar and a matrix and cast to a different dtype when the argument order is reversed', function test() {
+		var data, actual, expected;
+		data = matrix( new Int8Array( [ 1,2,3,4 ] ), [2,2] );
+		actual = divide( 12, data, {
+			'dtype': 'int32'
+		});
+		expected = matrix( new Int32Array( [12,6,4,3] ), [2,2] );
+
+		assert.strictEqual( actual.dtype, 'int32' );
+		assert.deepEqual( actual.data, expected.data );
 	});
 
 	it( 'should perform an element-wise division when provided a plain array and a scalar', function test() {
