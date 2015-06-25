@@ -145,7 +145,7 @@ describe( 'compute-divide', function tests() {
 		assert.strictEqual( divide( 20, 10  ), 2 );
 	});
 
-	it( 'should calculate the division of a scalar and an array when the argument order is reversed', function test() {
+	it( 'should calculate the division of a scalar by an array', function test() {
 		var data, actual, expected;
 		data = [ 1, 2 ];
 		actual = divide( 4, data );
@@ -153,7 +153,17 @@ describe( 'compute-divide', function tests() {
 		assert.deepEqual( actual, expected );
 	});
 
-	it( 'should calculate the division of a scalar and a matrix when the argument order is reversed', function test() {
+	it( 'should calculate the division of a scalar by an array and cast result to a different dtype', function test() {
+		var data, actual, expected;
+		data = [ 1, 2 ];
+		actual = divide( 10, data, {
+			'dtype':'int32'
+		});
+		expected = new Int32Array( [10,5] );
+		assert.deepEqual( actual, expected );
+	});
+
+	it( 'should calculate the division of a scalar by a matrix', function test() {
 		var data, actual, expected;
 		data = matrix( new Int8Array( [ 1,2,3,4 ] ), [2,2] );
 		actual = divide( 12, data );
@@ -162,7 +172,7 @@ describe( 'compute-divide', function tests() {
 		assert.deepEqual( actual.data, expected.data );
 	});
 
-	it( 'should calculate the division of a scalar and a matrix and cast to a different dtype when the argument order is reversed', function test() {
+	it( 'should calculate the division of a scalar by a matrix and cast to a different dtype', function test() {
 		var data, actual, expected;
 		data = matrix( new Int8Array( [ 1,2,3,4 ] ), [2,2] );
 		actual = divide( 12, data, {

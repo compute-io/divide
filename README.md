@@ -285,12 +285,26 @@ __Note__: mutation is the `array` or `matrix` equivalent of a __slash-equal__ (`
 *	Be careful when providing a data structure which contains non-numeric elements and specifying an `integer` output data type, as `NaN` values are cast to `0`.
 
 	``` javascript
-	var out = multiply( [ true, null, [] ], 1, {
+	var out = divide( [ true, null, [] ], 1, {
 		'dtype': 'int8'
 	});
-	// returns Int8Array( [0,0,0] );
+	// returns Int8Array( [0,0,0] )
 	```
+*	When calling the function with a numeric value as the first argument and a `matrix` or `array` as the second argument, only the `dtype` option is applicable.
 
+	``` javascript
+		// Valid:
+		var out = divide( 4, [ 1, 2, 3 ], {
+			'dtype': 'int8'
+		});
+		// returns Int8Array( [4,2,1] )
+
+		// Not valid:
+		var out = add( 4, [ 1, 2, 3 ], {
+			'copy': false
+		});
+		// throws an error
+	```
 
 ## Examples
 
