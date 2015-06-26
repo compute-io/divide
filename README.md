@@ -300,7 +300,7 @@ __Note__: mutation is the `array` or `matrix` equivalent of a __slash-equal__ (`
 		// returns Int8Array( [4,2,1] )
 
 		// Not valid:
-		var out = add( 4, [ 1, 2, 3 ], {
+		var out = divide( 4, [ 1, 2, 3 ], {
 			'copy': false
 		});
 		// throws an error
