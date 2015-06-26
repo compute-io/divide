@@ -147,15 +147,27 @@ describe( 'accessor divide', function tests() {
 
 		assert.deepEqual( actual, expected );
 
+		// single non-numeric value
+		y = false;
+		actual = new Array( data.length );
+		actual = divide( actual, data, y, getValue );
+		expected = [ NaN, NaN, NaN ];
+
+		assert.deepEqual( actual, expected );
+
 		// numeric array
 		y = [ 1, 2, 3 ];
 		actual = new Array( data.length );
 		actual = divide( actual, data, y, getValue );
 		expected = [ 1, NaN, 1 ];
 
-		function getValue( d, i ) {
-			return d.x;
-		}
+		// typed array
+		y = new Int32Array( [1,2,3] );
+		actual = new Array( data.length );
+		actual = divide( actual, data, y, getValue );
+		expected = [ 1, NaN, 1 ];
+
+		assert.deepEqual( actual, expected );
 
 		// object array
 		y = [
@@ -167,6 +179,10 @@ describe( 'accessor divide', function tests() {
 		actual = divide( actual, data, y, getValue2 );
 		expected = [ 1, NaN, 1 ];
 
+		function getValue( d, i ) {
+			return d.x;
+		}
+
 		function getValue2( d, i, j ) {
 			if ( j === 0 ) {
 				return d.x;
@@ -177,10 +193,20 @@ describe( 'accessor divide', function tests() {
 
 	});
 
-	it( 'should throw an error if provided an array to be multiplied which is not of equal length to the input array', function test() {
+	it( 'should throw an error if dividing by a matrix which is not of equal length to the input array', function test() {
 		expect( foo ).to.throw( Error );
 		function foo() {
 			divide( [], [1,2], [1,2,3], getValue );
+		}
+		function getValue( d ) {
+			return d;
+		}
+	});
+
+	it( 'should throw an error if dividing by a typed array which is not of equal length to the input array', function test() {
+		expect( foo ).to.throw( Error );
+		function foo() {
+			divide( [], [1,2], new Int32Array( [1,2,3] ), getValue );
 		}
 		function getValue( d ) {
 			return d;
